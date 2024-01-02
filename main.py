@@ -5,11 +5,8 @@ from cores.qqbot.global_object import (
 )
 import config
 import qianfan
+import os
 
-os.environ["QIANFAN_ACCESS_KEY"] = "your_iam_ak"
-os.environ["QIANFAN_SECRET_KEY"] = "your_iam_sk"
-
-os.environ["QIANFAN_APPID"] = "your_AppID"
 
 '''
 注意改插件名噢！格式：XXXPlugin 或 Main
@@ -23,6 +20,9 @@ class ErnieBotPlugin:
     """
 
     def __init__(self) -> None:
+        os.environ["QIANFAN_ACCESS_KEY"] = "your_iam_ak"
+        os.environ["QIANFAN_SECRET_KEY"] = "your_iam_sk"
+        os.environ["QIANFAN_APPID"] = "your_AppID"
         self.messages = []
         self.yiyan=qianfan.ChatCompletion()
 
@@ -45,7 +45,7 @@ class ErnieBotPlugin:
                 message_chain=[Plain("Error")],
                 command_name="yiyan"
             )
-        if ret.need_clear_history==True:
+        if (ret.body["need_clear_history"]==True):
             self.messages.clear()
             return CommandResult(
                 hit=True,
@@ -53,13 +53,13 @@ class ErnieBotPlugin:
                 message_chain=[Plain("存在违规内容")],
                 command_name="yiyan"
             )
-        self.messages.append({"role":"assistant","content":ret.result})
+        self.messages.append({"role":"assistant","content":ret.body["result"]})
         if(self.messages.__len__()>10):
             self.messages = self.messages[:10]
         return CommandResult(
             hit=True,
             success=True,
-            message_chain=[Plain(ret.result)],
+            message_chain=[Plain(ret.body["result"])],
             command_name="yiyan"
         )
 

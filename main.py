@@ -41,7 +41,7 @@ class ErnieBotPlugin:
         except Exception as e:
             return CommandResult(
                 hit=True,
-                success=True,
+                success=False,
                 message_chain=[Plain("Error")],
                 command_name="yiyan"
             )
@@ -49,7 +49,7 @@ class ErnieBotPlugin:
             self.messages.clear()
             return CommandResult(
                 hit=True,
-                success=True,
+                success=False,
                 message_chain=[Plain("存在违规内容")],
                 command_name="yiyan"
             )

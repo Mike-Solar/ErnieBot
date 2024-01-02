@@ -20,9 +20,9 @@ class ErnieBotPlugin:
     """
 
     def __init__(self) -> None:
-        os.environ["QIANFAN_ACCESS_KEY"] = "your_iam_ak"
-        os.environ["QIANFAN_SECRET_KEY"] = "your_iam_sk"
-        os.environ["QIANFAN_APPID"] = "your_AppID"
+        os.environ["QIANFAN_ACCESS_KEY"] = config.ACCESS_KEY
+        os.environ["QIANFAN_SECRET_KEY"] = config.SECRET_KEY
+        os.environ["QIANFAN_APPID"] = config.APPID
         self.messages = []
         self.yiyan=qianfan.ChatCompletion()
 

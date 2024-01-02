@@ -1,10 +1,17 @@
-# helloworld
+# ErnieBotPlugin
 
-AstrBot 插件模板
+为AstrBot增加文心一言。
 
-A template plugin for AstrBot plugin feature
+## 配置说明
 
-# 支持
+| 配置项         | 说明              | 
+|-------------|-----------------|
+| ACCESS_KEY  | 文心一言的Access Key |
+| SECRET_KEY  | 文心一言的Secret Key |
+| APP_ID      | 文心一言的App Id     |
+| SYSTEM_MSG  | 人设              |
+| MODULE      | 模型              |
 
-[帮助文档](https://astrbot.soulter.top/center/docs/%E5%BC%80%E5%8F%91/%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91/
-)
+> 注意：文心一言模型默认联网且不可更改。如需更改欢迎fork。
+
+

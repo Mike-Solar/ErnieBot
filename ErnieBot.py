@@ -6,17 +6,15 @@ from cores.qqbot.global_object import (
 import qianfan
 import os
 
-
 '''
 注意改插件名噢！格式：XXXPlugin 或 Main
 小提示：把此模板仓库 fork 之后 clone 到机器人文件夹下的 addons/plugins/ 目录下，然后用 Pycharm/VSC 等工具打开可获更棒的编程体验（自动补全等）
 '''
 
-
-ACCESS_KEY="Key"
-SECRET_KEY="Key"
-APP_ID="AppId"
-SYSTEM_MSG="System Message"
+ACCESS_KEY = "Key"
+SECRET_KEY = "Key"
+APP_ID = "AppId"
+SYSTEM_MSG = "System Message"
 
 '''
 MODULE可以为
@@ -25,7 +23,7 @@ MODULE可以为
 · ERNIE-Bot
 · ERNIE-Bot-turbo
 '''
-MODULE="ERNIE-Bot-turbo"
+MODULE = "ERNIE-Bot-turbo"
 
 
 class ErnieBotPlugin:
@@ -34,11 +32,12 @@ class ErnieBotPlugin:
     """
 
     def __init__(self) -> None:
+        print("ErnieBotPlugin")
         os.environ["QIANFAN_ACCESS_KEY"] = ACCESS_KEY
         os.environ["QIANFAN_SECRET_KEY"] = SECRET_KEY
         os.environ["QIANFAN_APPID"] = APP_ID
         self.messages = []
-        self.yiyan=qianfan.ChatCompletion()
+        self.yiyan = qianfan.ChatCompletion()
 
     """
     机器人程序会调用此函数。
@@ -50,16 +49,17 @@ class ErnieBotPlugin:
     def run(self, ame: AstrMessageEvent):
         message = {"role": "user", "content": ame.message_str}
         self.messages.append(message)
-        try:
-            ret = self.yiyan.do(messages=self.messages, model=MODULE, system=SYSTEM_MSG, enable_citation=True)
-        except Exception as e:
-            return CommandResult(
-                hit=True,
-                success=False,
-                message_chain=[Plain("Error")],
-                command_name="yiyan"
-            )
-        if (ret.body["need_clear_history"]==True):
+        if self.messages:
+            try:
+                ret = self.yiyan.do(messages=self.messages, model=MODULE, system=SYSTEM_MSG, enable_citation=True)
+            except Exception as e:
+                return CommandResult(
+                    hit=True,
+                    success=False,
+                    message_chain=[Plain("Error")],
+                    command_name="yiyan"
+                )
+        if ret.body["need_clear_history"]:
             self.messages.clear()
             return CommandResult(
                 hit=True,
@@ -67,8 +67,8 @@ class ErnieBotPlugin:
                 message_chain=[Plain("存在违规内容")],
                 command_name="yiyan"
             )
-        self.messages.append({"role":"assistant","content":ret.body["result"]})
-        if(self.messages.__len__()>10):
+        self.messages.append({"role": "assistant", "content": ret.body["result"]})
+        if (self.messages.__len__() > 10):
             self.messages = self.messages[:10]
         return CommandResult(
             hit=True,

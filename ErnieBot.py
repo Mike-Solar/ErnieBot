@@ -11,10 +11,10 @@ import os
 小提示：把此模板仓库 fork 之后 clone 到机器人文件夹下的 addons/plugins/ 目录下，然后用 Pycharm/VSC 等工具打开可获更棒的编程体验（自动补全等）
 '''
 
-ACCESS_KEY = "Key"
-SECRET_KEY = "Key"
-APP_ID = "AppId"
-SYSTEM_MSG = "System Message"
+ACCESS_KEY = "AK"
+SECRET_KEY = "SK"
+APP_ID = "APPID"
+SYSTEM_MSG = "SYS"
 
 '''
 MODULE可以为
@@ -33,8 +33,8 @@ class ErnieBotPlugin:
 
     def __init__(self) -> None:
         print("ErnieBotPlugin")
-        os.environ["QIANFAN_ACCESS_KEY"] = ACCESS_KEY
-        os.environ["QIANFAN_SECRET_KEY"] = SECRET_KEY
+        os.environ["QIANFAN_AK"] = ACCESS_KEY
+        os.environ["QIANFAN_SK"] = SECRET_KEY
         os.environ["QIANFAN_APPID"] = APP_ID
         self.messages = []
         self.yiyan = qianfan.ChatCompletion()

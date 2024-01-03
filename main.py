@@ -3,7 +3,6 @@ from cores.qqbot.global_object import (
     AstrMessageEvent,
     CommandResult
 )
-import config
 import qianfan
 import os
 
@@ -14,15 +13,30 @@ import os
 '''
 
 
+ACCESS_KEY="Key"
+SECRET_KEY="Key"
+APP_ID="AppId"
+SYSTEM_MSG="System Message"
+
+'''
+MODULE可以为
+· ERNIE-Bot-4
+· ERNIE-Bot-8k
+· ERNIE-Bot
+· ERNIE-Bot-turbo
+'''
+MODULE="ERNIE-Bot-turbo"
+
+
 class ErnieBotPlugin:
     """
     初始化函数, 可以选择直接pass
     """
 
     def __init__(self) -> None:
-        os.environ["QIANFAN_ACCESS_KEY"] = config.ACCESS_KEY
-        os.environ["QIANFAN_SECRET_KEY"] = config.SECRET_KEY
-        os.environ["QIANFAN_APPID"] = config.APPID
+        os.environ["QIANFAN_ACCESS_KEY"] = ACCESS_KEY
+        os.environ["QIANFAN_SECRET_KEY"] = SECRET_KEY
+        os.environ["QIANFAN_APPID"] = APP_ID
         self.messages = []
         self.yiyan=qianfan.ChatCompletion()
 
@@ -37,7 +51,7 @@ class ErnieBotPlugin:
         message = {"role": "user", "content": ame.message_str}
         self.messages.append(message)
         try:
-            ret = self.yiyan.do(messages=self.messages, model=config.MODULE, system=config.SYSTEM_MSG, enable_citation=True)
+            ret = self.yiyan.do(messages=self.messages, model=MODULE, system=SYSTEM_MSG, enable_citation=True)
         except Exception as e:
             return CommandResult(
                 hit=True,

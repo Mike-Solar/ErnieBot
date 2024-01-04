@@ -11,11 +11,15 @@ import os
 小提示：把此模板仓库 fork 之后 clone 到机器人文件夹下的 addons/plugins/ 目录下，然后用 Pycharm/VSC 等工具打开可获更棒的编程体验（自动补全等）
 '''
 
-ACCESS_KEY = "AK"
-SECRET_KEY = "SK"
-APP_ID = "APPID"
-SYSTEM_MSG = "SYS"
-CHANNEL_ID = "CHANNEL_ID"
+APP_KEY = ""
+SECRET_KEY = ""
+APP_ID = ""
+SYSTEM_MSG = ""
+
+'''
+这个是int型
+'''
+CHANNEL_ID = []
 
 '''
 MODULE可以为
@@ -34,7 +38,7 @@ class ErnieBotPlugin:
 
     def __init__(self) -> None:
         print("ErnieBotPlugin")
-        os.environ["QIANFAN_AK"] = ACCESS_KEY
+        os.environ["QIANFAN_AK"] = APP_KEY
         os.environ["QIANFAN_SK"] = SECRET_KEY
         os.environ["QIANFAN_APPID"] = APP_ID
         self.messages = []
@@ -49,9 +53,9 @@ class ErnieBotPlugin:
 
     def run(self, ame: AstrMessageEvent):
         message = {"role": "user", "content": ame.message_str}
-        message_obj=ame.message_obj
+        message_obj = ame.message_obj
         if message_obj:
-            if message_obj.channel_id==CHANNEL_ID:
+            if message_obj.channel_id in CHANNEL_ID:
                 self.messages.append(message)
                 if self.messages:
                     try:

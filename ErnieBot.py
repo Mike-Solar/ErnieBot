@@ -15,6 +15,7 @@ ACCESS_KEY = "AK"
 SECRET_KEY = "SK"
 APP_ID = "APPID"
 SYSTEM_MSG = "SYS"
+CHANNEL_ID = "CHANNEL_ID"
 
 '''
 MODULE可以为
@@ -48,34 +49,52 @@ class ErnieBotPlugin:
 
     def run(self, ame: AstrMessageEvent):
         message = {"role": "user", "content": ame.message_str}
-        self.messages.append(message)
-        if self.messages:
-            try:
-                ret = self.yiyan.do(messages=self.messages, model=MODULE, system=SYSTEM_MSG, enable_citation=True)
-            except Exception as e:
+        message_obj=ame.message_obj
+        if message_obj:
+            if message_obj.channel_id==CHANNEL_ID:
+                self.messages.append(message)
+                if self.messages:
+                    try:
+                        ret = self.yiyan.do(messages=self.messages, model=MODULE, system=SYSTEM_MSG,
+                                            enable_citation=True)
+                    except Exception as e:
+                        return CommandResult(
+                            hit=True,
+                            success=False,
+                            message_chain=[Plain("Error")],
+                            command_name="yiyan"
+                        )
+                if ret.body["need_clear_history"]:
+                    self.messages.clear()
+                    return CommandResult(
+                        hit=True,
+                        success=False,
+                        message_chain=[Plain("存在违规内容")],
+                        command_name="yiyan"
+                    )
+                self.messages.append({"role": "assistant", "content": ret.body["result"]})
+                if (self.messages.__len__() > 10):
+                    self.messages = self.messages[:10]
                 return CommandResult(
                     hit=True,
-                    success=False,
-                    message_chain=[Plain("Error")],
+                    success=True,
+                    message_chain=[Plain(ret.body["result"])],
                     command_name="yiyan"
                 )
-        if ret.body["need_clear_history"]:
-            self.messages.clear()
+            else:
+                return CommandResult(
+                    hit=False,
+                    success=False,
+                    message_chain=[],
+                    command_name="yiyan"
+                )
+        else:
             return CommandResult(
-                hit=True,
+                hit=False,
                 success=False,
-                message_chain=[Plain("存在违规内容")],
+                message_chain=[],
                 command_name="yiyan"
             )
-        self.messages.append({"role": "assistant", "content": ret.body["result"]})
-        if (self.messages.__len__() > 10):
-            self.messages = self.messages[:10]
-        return CommandResult(
-            hit=True,
-            success=True,
-            message_chain=[Plain(ret.body["result"])],
-            command_name="yiyan"
-        )
 
     """
     插件元信息。
